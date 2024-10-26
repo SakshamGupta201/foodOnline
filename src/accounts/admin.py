@@ -4,25 +4,12 @@ from accounts.models import CustomUser, UserProfile
 
 
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = [
-        "first_name",
-        "last_name",
-        "username",
-        "email",
-        "phone_number",
-        "role",
-    ]
-    search_fields = [
-        "first_name",
-        "last_name",
-        "username",
-        "email",
-        "phone_number",
-        "role",
-    ]
-    list_filter = ["role"]
-    readonly_fields = ["date_joined", "last_login", "password"]
+    list_display = ("email", "first_name", "last_name", "username", "role", "is_active")
+    ordering = ("-date_joined",)
+    filter_horizontal = ()
+    list_filter = ()
+    fieldsets = ()
 
 
-admin.site.register(CustomUser)
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(UserProfile)
