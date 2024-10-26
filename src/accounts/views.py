@@ -1,13 +1,17 @@
 from django.shortcuts import render
 
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView
-from accounts.forms import CustomUserCreationForm, LoginForm
+from django.contrib.auth.views import LoginView
+from accounts.forms import CustomUserCreationForm, CustomUserLoginForm
 
 
 class SignUpView(CreateView):
-    template_name = "registration/signup.html"
+    template_name = "accounts/registerUser.html"
     form_class = CustomUserCreationForm
-    success_url = reversed("login")
+
+    def get_success_url(self):
+        return reverse("login")
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -18,15 +22,7 @@ class SignUpView(CreateView):
         return response
 
 
-class LoginView(CreateView):
-    template_name = "registration/login.html"
-    form_class = LoginForm
-    success_url = reversed("home")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        return response
-
-    def form_invalid(self, form):
-        response = super().form_invalid(form)
-        return response
+class CustomLoginView(LoginView):
+    form_class = CustomUserLoginForm
+    template_name = "accounts/login.html"
+    success_url = reverse_lazy("home")
