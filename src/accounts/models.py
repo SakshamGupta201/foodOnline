@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
+
 class CustomUserManager(BaseUserManager):
     def create_user(
         self, first_name, last_name, username, email, password, **extra_fields
@@ -10,6 +11,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError("The Email field must be set")
         if not username:
             raise ValueError("The Username field must be set")
+        if not password:
+            raise ValueError("The Password field must be set")
 
         email = self.normalize_email(email)
         user = self.model(
@@ -70,26 +73,6 @@ class CustomUser(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
-    """
-    UserProfile model represents the profile information associated with a user.
-    Attributes:
-        user (OneToOneField): A one-to-one relationship with the CustomUser model.
-        profile_picture (ImageField): An optional profile picture for the user.
-        cover_picture (ImageField): An optional cover picture for the user.
-        address_line_1 (CharField): The first line of the user's address.
-        address_line_2 (CharField): The second line of the user's address.
-        country (CharField): The country of the user's address.
-        city (CharField): The city of the user's address.
-        state (CharField): The state of the user's address.
-        postal_code (CharField): The postal code of the user's address.
-        longitude (FloatField): The longitude coordinate of the user's address.
-        latitude (FloatField): The latitude coordinate of the user's address.
-        created_at (DateTimeField): The date and time when the profile was created.
-        updated_at (DateTimeField): The date and time when the profile was last updated.
-    Methods:
-        __str__(): Returns a string representation of the user profile, typically the user's email.
-    """
-
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     profile_picture = models.ImageField(
         upload_to="profile_pictures", blank=True, null=True
@@ -109,3 +92,5 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.email}"
+
+
