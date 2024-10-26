@@ -53,82 +53,7 @@
                     <a href="{% url 'home' %}" class="light-logo"><img src="{% static 'extra-images/main-logo.png' %}" alt="FoodBakery" /></a>
                   </figure>
                 </div>
-                <div class="main-nav">
-                  <nav id="site-navigation" class="main-navigation">
-                    <ul>
-                      <li>
-                        <a href="#">Demos</a>
-                        <ul>
-                          <li>
-                            <a href="{% url 'home' %}">Food Bakery</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Mexican Restaurant</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Food Stop</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Rtl Demo</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Food Court</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Single Restaurant Demo</a>
-                          </li>
-                        </ul>
-                        <!-- End Sub Menu -->
-                      </li>
-                      <li>
-                        <a href="{% url 'home' %}">Restaurants</a>
-                      </li>
-                      <li>
-                        <a href="#">Pages</a>
-                        <ul>
-                          <li>
-                            <a href="{% url 'home' %}">Price Plans</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">How it works</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">FAQ’s</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">404</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Search Result</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Contact</a>
-                          </li>
-                        </ul>
-                        <!-- End Sub Menu -->
-                      </li>
-                      <li>
-                        <a href="#">Blogs</a>
-                        <ul>
-                          <li>
-                            <a href="{% url 'home' %}">Blog Large</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Blog Medium</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Blog Masonry</a>
-                          </li>
-                          <li>
-                            <a href="{% url 'home' %}">Blog Detail Page</a>
-                          </li>
-                        </ul>
-                        <!-- End Sub Menu -->
-                      </li>
-                    </ul>
-                  </nav>
-                  <!-- .main-navigation -->
-                </div>
+
                 <div class="main-location">
                   <ul>
                     <li class="location-has-children choose-location">
@@ -142,7 +67,9 @@
               </div>
               <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="login-option">
-                  <a class="cs-color cs-popup-joinus-btn login-popup" data-target="#sign-in" data-toggle="modal" href="#user-register">Login / Register</a><a class="get-start-btn" href="{% url 'home' %}">Register Restaurant</a>
+                  <a class="cs-color cs-popup-joinus-btn login-popup" href="{% url 'login' %}">Login/</a>
+                  <span><a class="cs-color cs-popup-joinus-btn login-popup m-0" href="{% url 'signup' %}">Register</a></span>
+                  <a class="get-start-btn" href="{% url 'home' %}">Register Restaurant</a>
                 </div>
               </div>
             </div>

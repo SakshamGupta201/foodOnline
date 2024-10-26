@@ -10,6 +10,11 @@ class CustomUserAdmin(admin.ModelAdmin):
     list_filter = ()
     fieldsets = ()
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return ["password"]
+        return self.readonly_fields
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(UserProfile)
