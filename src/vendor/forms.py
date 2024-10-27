@@ -9,11 +9,8 @@ class VendorForm(forms.ModelForm):
         model = Vendor
         fields = ["name", "license"]
 
-    def save(self, request, commit: bool = True) -> Any:
-        vendor = super().save(commit=False)
-        vendor.user = request.user
-        # ! fix the issue
-        vendor.user_profile = request.user.user_profile
-        if commit:
-            vendor.save()
-        return vendor
+    def __init__(self, *args, **kwargs):
+        super(VendorForm, self).__init__(*args, **kwargs)
+        self.fields["name"].widget.attrs.update({"class": "form-control"})
+        self.fields["license"].widget.attrs.update({"class": "form-control"})
+        self.fields["name"].label = "Restaurant Name"

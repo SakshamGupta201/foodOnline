@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
-
 class CustomUserManager(BaseUserManager):
     def create_user(
         self, first_name, last_name, username, email, password, **extra_fields
@@ -38,9 +37,9 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser):
-    RESTAURANT = 1
+    VENDOR = 1
     CUSTOMER = 2
-    ROLE_CHOICES = ((RESTAURANT, "Restaurant"), (CUSTOMER, "Customer"))
+    ROLE_CHOICES = ((VENDOR, "VENDOR"), (CUSTOMER, "Customer"))
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
@@ -92,5 +91,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.email}"
-
-

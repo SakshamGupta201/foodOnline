@@ -5,5 +5,5 @@ app_name = "vendor"
 
 urlpatterns = [
     path("", views.vendor_home, name="vendor_home"),
-    path("register/", views.RegisterVendor.as_view(), name="vendor_register"),
+    path("register/", views.RegisterVendor, name="vendor_register"),
 ]
