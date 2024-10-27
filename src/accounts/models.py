@@ -70,6 +70,13 @@ class CustomUser(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return self.is_superuser
 
+    @property
+    def get_role(self):
+        if self.role == self.VENDOR:
+            return "Vendor"
+        else:
+            return "Customer"
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
