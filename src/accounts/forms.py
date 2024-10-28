@@ -31,9 +31,8 @@ class CustomUserCreationForm(forms.ModelForm):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password"])
         if commit:
-            # send email verification
-            send_email_verification(request, user)
             user.save()
+            send_email_verification(request, user)
         return user
 
 

@@ -6,6 +6,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib import messages
 
 from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm, VendorForm
 from accounts.forms import CustomAuthenticationForm
@@ -110,4 +114,18 @@ def vendor_dashboard_view(request):
 
 
 def activate(request: Any, uidb64: str, token: str) -> Any:
-    return render(request, "accounts/activate.html")
+    try:
+        uid = force_bytes(urlsafe_base64_decode(uidb64))
+        user = CustomUser.objects.get(pk=uid)
+        if default_token_generator.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.success(request, "Account activated successfully")
+            return redirect("myAccount")
+        else:
+            messages.error(request, "Activation link has expired")
+            return redirect("home")
+    except Exception as e:
+        user = None
+        messages.error(request, "Activation link has expired")
+        return redirect("register")
