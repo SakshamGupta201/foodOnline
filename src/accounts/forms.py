@@ -4,6 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
 
+from accounts.utils import send_email_verification
+
 from .models import CustomUser
 
 
@@ -25,10 +27,12 @@ class CustomUserCreationForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control"
 
-    def save(self, commit=True):
+    def save(self, request, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password"])
         if commit:
+            # send email verification
+            send_email_verification(request, user)
             user.save()
         return user
 

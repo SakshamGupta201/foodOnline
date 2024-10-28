@@ -11,6 +11,7 @@ from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm, Ven
 from accounts.forms import CustomAuthenticationForm
 from accounts.models import CustomUser, UserProfile
 from accounts.utils import detect_user
+from typing import Any
 
 
 # Restrict customer to access vendor dashboard
@@ -27,20 +28,15 @@ def check_role_customer(user):
     raise PermissionDenied("You are not allowed to access this page")
 
 
-class SignUpView(CreateView):
-    template_name = "accounts/registerUser.html"
-    form_class = CustomUserCreationForm
-
-    def get_success_url(self):
-        return reverse("login")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        return response
-
-    def form_invalid(self, form):
-        response = super().form_invalid(form)
-        return response
+def signup_view(request):
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            form.save(request=request, commit=True)
+            return HttpResponseRedirect(reverse("login"))
+    else:
+        form = CustomUserCreationForm()
+    return render(request, "accounts/registerUser.html", {"form": form})
 
 
 def login_view(request):
@@ -111,3 +107,7 @@ def customer_dashboard_view(request):
 @user_passes_test(check_role_vendor)
 def vendor_dashboard_view(request):
     return render(request, "dashboard/vendorDashboard.html")
+
+
+def activate(request: Any, uidb64: str, token: str) -> Any:
+    return render(request, "accounts/activate.html")
