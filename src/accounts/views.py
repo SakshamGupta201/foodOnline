@@ -7,14 +7,15 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
 from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_str  # Import force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
+
 
 from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm, VendorForm
 from accounts.forms import CustomAuthenticationForm
 from accounts.models import CustomUser, UserProfile
-from accounts.utils import detect_user
+from accounts.utils import detect_user, send_reset_password_email
 from typing import Any
 
 
@@ -130,3 +131,49 @@ def activate(request: Any, uidb64: str, token: str) -> Any:
         user = None
         messages.error(request, "Activation link has expired")
         return redirect("register")
+
+
+def forgot_password_view(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        try:
+            user = CustomUser.objects.get(email__exact=email)
+            send_reset_password_email(request, user)
+            messages.success(request, "Password reset link sent to your email")
+        except CustomUser.DoesNotExist:
+            messages.error(request, "User does not exist")
+    return render(request, "accounts/forgot_password.html")
+
+
+def reset_password_validate(request, uidb64, token):
+    try:
+        uid = force_str(
+            urlsafe_base64_decode(uidb64)
+        )  # Use force_str instead of force_bytes
+        user = CustomUser.objects.get(pk=uid)
+        if default_token_generator.check_token(user, token):
+            request.session["uid"] = uid
+            return redirect("reset_password")
+        else:
+            messages.error(request, "Password reset link has expired")
+            return redirect("forgot_password")
+    except Exception as e:
+        user = None
+        messages.error(request, "Password reset link has expired")
+        return redirect("forgot_password")
+
+
+def reset_password(request):
+    if request.method == "POST":
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+        if password == confirm_password:
+            uid = request.session.get("uid")
+            user = CustomUser.objects.get(pk=uid)
+            user.set_password(password)
+            user.save()
+            messages.success(request, "Password reset successfully")
+            return redirect("login")
+        else:
+            messages.error(request, "Password does not match")
+    return render(request, "accounts/reset_password.html")

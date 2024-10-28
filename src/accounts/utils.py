@@ -37,3 +37,22 @@ def send_email_verification(request, user: CustomUser) -> None:
     mail = EmailMessage(subject, message, from_email, to=[to_email])
     mail.content_subtype = "html"
     mail.send()
+
+
+def send_reset_password_email(request, user: CustomUser) -> None:
+    from_email = settings.DEFAULT_FROM_EMAIL
+    current_site = get_current_site(request)
+    subject = "Reset Password"
+    message = render_to_string(
+        "accounts/email/reset_password.html",
+        {
+            "user": user,
+            "domain": current_site.domain,
+            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+            "token": default_token_generator.make_token(user),
+        },
+    )
+
+    to_email = user.email
+    mail = EmailMessage(subject, message, from_email, to=[to_email])
+    mail.send()

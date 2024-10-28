@@ -8,7 +8,11 @@ from accounts.views import (
     customer_dashboard_view,
     vendor_dashboard_view,
     activate,
+    forgot_password_view,
+    reset_password_validate,
+    reset_password,
 )
+
 
 urlpatterns = [
     path("login/", login_view, name="login"),
@@ -19,4 +23,11 @@ urlpatterns = [
     path("customerDashboard/", customer_dashboard_view, name="customerDashboard"),
     path("vendorDashboard/", vendor_dashboard_view, name="vendorDashboard"),
     path("activate/<uidb64>/<token>/", activate, name="activate"),
+    path("forgot-password/", forgot_password_view, name="forgot_password"),
+    path(
+        "reset-password-validate/<uidb64>/<token>/",
+        reset_password_validate,
+        name="reset_password_validate",
+    ),
+    path("reset-password/", reset_password, name="reset_password"),
 ]
