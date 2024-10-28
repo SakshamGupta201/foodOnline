@@ -4,12 +4,27 @@ from django.views.generic import CreateView
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
 
 from accounts.forms import CustomUserCreationForm, CustomAuthenticationForm, VendorForm
 from accounts.forms import CustomAuthenticationForm
 from accounts.models import CustomUser, UserProfile
 from accounts.utils import detect_user
+
+
+# Restrict customer to access vendor dashboard
+def check_role_vendor(user):
+    if user.role == CustomUser.VENDOR:
+        return True
+    raise PermissionDenied("You are not allowed to access this page")
+
+
+# Restrict vendor to access customer dashboard
+def check_role_customer(user):
+    if user.role == CustomUser.CUSTOMER:
+        return True
+    raise PermissionDenied("You are not allowed to access this page")
 
 
 class SignUpView(CreateView):
@@ -87,10 +102,12 @@ def account_view(request):
 
 
 @login_required
+@user_passes_test(check_role_customer)
 def customer_dashboard_view(request):
     return render(request, "dashboard/customerDashboard.html")
 
 
 @login_required
+@user_passes_test(check_role_vendor)
 def vendor_dashboard_view(request):
     return render(request, "dashboard/vendorDashboard.html")

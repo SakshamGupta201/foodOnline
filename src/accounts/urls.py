@@ -15,6 +15,6 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     path("register/", register_vendor_view, name="vendor_register"),
     path("myAccount/", account_view, name="myAccount"),
-    path("customerDashboardd/", customer_dashboard_view, name="customerDashboard"),
+    path("customerDashboard/", customer_dashboard_view, name="customerDashboard"),
     path("vendorDashboard/", vendor_dashboard_view, name="vendorDashboard"),
 ]
