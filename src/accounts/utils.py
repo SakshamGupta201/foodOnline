@@ -23,7 +23,6 @@ def send_email_verification(request, user: CustomUser) -> None:
     from_email = settings.DEFAULT_FROM_EMAIL
     current_site = get_current_site(request)
     subject = "Email Verification"
-    print(user.pk)
     message = render_to_string(
         "accounts/email/email_verification.html",
         {
