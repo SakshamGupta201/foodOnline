@@ -21,6 +21,8 @@ from typing import Any
 
 # Restrict customer to access vendor dashboard
 def check_role_vendor(user):
+    if user.is_superuser:
+        return True
     if user.role == CustomUser.VENDOR:
         return True
     raise PermissionDenied("You are not allowed to access this page")
@@ -28,6 +30,8 @@ def check_role_vendor(user):
 
 # Restrict vendor to access customer dashboard
 def check_role_customer(user):
+    if user.is_superuser:
+        return True
     if user.role == CustomUser.CUSTOMER:
         return True
     raise PermissionDenied("You are not allowed to access this page")
