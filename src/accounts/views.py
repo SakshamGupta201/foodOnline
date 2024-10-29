@@ -127,7 +127,7 @@ def activate(request: Any, uidb64: str, token: str) -> Any:
             user.save()
             messages.success(request, "Account activated successfully")
             login(request, user)
-            return redirect("myAccount")
+            return reverse("myAccount")
         else:
             messages.error(request, "Activation link has expired")
             return redirect("home")
